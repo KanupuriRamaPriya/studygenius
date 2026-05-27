@@ -20,19 +20,17 @@ app.post('/api/summarize', async (req, res) => {
   try {
     const { notes } = req.body;
     
-    // Using a simpler initialization
-    // Change this line in your server.
-
-// Change this line in your server.js
-const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+    // Using the current stable model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const result = await model.generateContent(notes);
     res.json({ summary: result.response.text() });
   } catch (error) {
     console.error("AI Error:", error);
-    // If it fails, this will tell us if it's an API Key or Model error
     res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// Use process.env.PORT for deployment, fallback to 5000 for local development
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
