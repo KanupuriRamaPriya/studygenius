@@ -10,11 +10,17 @@ function App() {
   const generateSummary = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/summarize', { notes });
+     const response = await axios.post('https://studygenius-lta2.onrender.com/api/summarize', {
+    notes: notes
+    });
+      
       setSummary(response.data.summary);
-    } catch (error) {
-      alert("Error: Check terminal logs.");
-    } finally {
+    } // Change your catch block to this:
+    catch (error) {
+  console.error("Full error details:", error);
+  alert("Error: " + (error.response?.data?.error || error.message));
+                  }
+     finally {
       setLoading(false);
     }
   };
