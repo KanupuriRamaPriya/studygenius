@@ -6,8 +6,12 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173", methods: ["GET", "POST"] }));
-app.use(cors()); 
+// Change your CORS setup to this:
+app.use(cors({
+  origin: "*", // Allows requests from any frontend URL
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected!"))
