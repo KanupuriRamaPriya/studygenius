@@ -32,7 +32,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.post('/api/summarize', async (req, res) => {
   try {
     const { notes } = req.body;
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
     const result = await model.generateContent(notes);
     res.json({ summary: result.response.text() });
