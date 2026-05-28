@@ -28,15 +28,20 @@ mongoose.connect(process.env.MONGO_URI)
 // Initialize AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Add this simple retry logic in your server.js
 app.post('/api/summarize', async (req, res) => {
   try {
     const { notes } = req.body;
-    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const result = await model.generateContent(notes);
     res.json({ summary: result.response.text() });
   } catch (error) {
-    console.error("AI Error:", error);
-    res.status(500).json({ error: error.message });
+    if (error.status === 429) {
+      res.status(429).json({ error: "Too many requests. Please wait a minute and try again." });
+    } else {
+      console.error("AI Error:", error);
+      res.status(500).json({ error: error.message });
+    }
   }
 });
